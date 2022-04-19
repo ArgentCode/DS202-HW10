@@ -1,9 +1,12 @@
 ---
-title: "Untitled"
+title: "DS202 HW 10"
 author: "Craig Orman"
 date: "4/13/2022"
 output: html_document
 ---
+
+Link to the [Github Project](https://github.com/ArgentCode/DS202-HW10 "Github Project")
+Homework is detailed in [Slides 5-7](https://yumouqiu.github.io/DS202-Spring2022/Practice/practice05.html)
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -14,7 +17,83 @@ library(tidyverse)
 library(lubridate)
 library(maps)
 vehicleRaw = read.csv("vehicle.csv")
-personRaw = read.csv("person.csv")
 accidentRaw = read.csv("accident.csv")
 ```
 
+### Slide 5
+are there some days of the week where more accidents happen than on others (use variable DAY_WEEK)?
+```{r}
+
+acc = accidentRaw
+acc %>% group_by(DAY_WEEK) %>% tally()
+acc %>% ggplot(aes(x=DAY_WEEK)) +
+  geom_bar() +
+  ggtitle("Accidents by day_week") +
+  ylab("accident count")
+```
+
+what time of the day do accidents happen (use variable HOUR)?
+```{r}
+acc.hour = acc %>% filter(HOUR <= 24) %>% group_by(HOUR) %>% tally()
+acc.hour %>%
+  ggplot(aes(x=HOUR)) +
+  geom_bar(aes(weight = n)) +
+  ggtitle("Accidents by hour") + ylab("accident count")
+```
+
+what is the number of accidents with at least one drunk driver (use variable DRUNK_DR)?
+```{r}
+filter(acc, DRUNK_DR > 0) %>% summarize(n=n())
+```
+
+The day of the week with the most accidents is the 7th day, and the day with the least is the 3rd day. Unsure which day of the week that specifically is referring to. 1800 (6pm) has the highest count of accidents, while 0400 (4am) has the lowest count of accidents. There are 8,720 accidents that involve atleast one drunk driver.
+
+
+### Slide 6
+Connect to the person table. Identify drivers (PER_TYP == 1, see fars manual ) and subset on them.
+```{r}
+personRaw = read.csv("person.csv")
+persons1 = filter(personRaw, PER_TYP == 1)
+persons1 = filter(persons1, SEX < 3)
+```
+
+Join accident and driver table (work out which variable(s) to use)
+```{r}
+matchingData = intersect(colnames(acc), colnames(persons1))
+matchingData2 = c("STATE", "ST_CASE", "COUNTY", "DAY", "MONTH", "HOUR", "MINUTE")
+persons1.reduced = persons1 %>% select("STATE", "ST_CASE", "COUNTY", "DAY", "MONTH", "HOUR", "MINUTE", "DRUGS", "AGE", "LOCATION", "SEX")
+acc.reduced = acc %>% select("STATE", "ST_CASE", "COUNTY", "DAY", "MONTH", "HOUR", "MINUTE", "DAY_WEEK")
+acc.person.reduced = right_join(acc.reduced, persons1.reduced, by = matchingData2)
+dim(acc.person.reduced)
+#14 matching columns used to match the data
+```
+
+
+
+dim(persons1)-dim(acc)
+#added  69 columns, and 17475 rows
+
+Tally the number of accidents by day of the week (DAY_WEEK), hour of the day (HOUR) and gender (SEX). Visualize the results!
+```{r}
+mixed = acc.person.reduced
+mixed.hour = mixed %>% filter(HOUR <= 24) %>% group_by(HOUR) %>% tally()
+mixed.day = mixed %>% group_by(DAY_WEEK) %>% tally()
+mixed.sex = mixed %>% group_by(SEX) %>% count()
+```
+
+```{r}
+mixed.hour %>%
+  ggplot(aes(x=HOUR)) +
+  geom_bar(aes(weight = n)) +
+  ggtitle("Accidents by hour") + ylab("accident count")
+
+mixed.day %>%
+  ggplot(aes(x=DAY_WEEK)) +
+  geom_bar(aes(weight = n))
+
+# Radar plot the days of the week?
+# Maybe plot them on a map?
+# other cool ideas?
+# Do a cool multi graph comparing men and women drunk drivers
+# Do a weird day of the week, colored by hour data
+```
