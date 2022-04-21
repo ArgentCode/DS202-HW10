@@ -45,7 +45,7 @@ what is the number of accidents with at least one drunk driver (use variable DRU
 ```{r}
 filter(acc, DRUNK_DR > 0) %>% summarize(n=n())
 ```
-
+#### Slide 5 Answers
 The day of the week with the most accidents is the 7th day, and the day with the least is the 3rd day. Unsure which day of the week that specifically is referring to. 1800 (6pm) has the highest count of accidents, while 0400 (4am) has the lowest count of accidents. There are 8,720 accidents that involve atleast one drunk driver.
 
 
@@ -67,11 +67,6 @@ acc.person.reduced = right_join(acc.reduced, persons1.reduced, by = matchingData
 dim(acc.person.reduced)
 #14 matching columns used to match the data
 ```
-
-
-
-dim(persons1)-dim(acc)
-#added  69 columns, and 17475 rows
 
 Tally the number of accidents by day of the week (DAY_WEEK), hour of the day (HOUR) and gender (SEX). Visualize the results!
 ```{r}
