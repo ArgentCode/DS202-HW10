@@ -48,6 +48,31 @@ filter(acc, DRUNK_DR > 0) %>% summarize(n=n())
 #### Slide 5 Answers
 The day of the week with the most accidents is the 7th day, and the day with the least is the 3rd day. Unsure which day of the week that specifically is referring to. 1800 (6pm) has the highest count of accidents, while 0400 (4am) has the lowest count of accidents. There are 8,720 accidents that involve atleast one drunk driver.
 
+>__Ngoc Nguyen's Part 1 answer__<
+
+```{r}
+#overlook the data
+str(accidentRaw)
+```
+- Are there some days of the week where more accidents happen than on others (use variable DAY_WEEK)?
+```{r}
+
+ggplot(accidentRaw, aes(x = DAY_WEEK))+ 
+      geom_bar(aes(fill=DAY_WEEK)) +
+      ggtitle("Accidents By Weekdays")
+```
+
+- what time of the day do accidents happen (use variable HOUR)?
+```{r}
+
+accidentRaw %>% 
+  filter(HOUR < 24)%>% ggplot(aes(x = HOUR))+ geom_bar(aes(fill=HOUR))+ ggtitle("Accidents By HOUR")
+```
+
+what is the number of accidents with at least one drunk driver (use variable DRUNK_DR)?
+```{r}
+filter(accidentRaw, DRUNK_DR > 0)%>% summarize(n=n())
+``` 
 
 ### Slide 6
 Connect to the person table. Identify drivers (PER_TYP == 1, see fars manual ) and subset on them.
