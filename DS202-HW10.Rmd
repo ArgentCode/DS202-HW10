@@ -85,15 +85,42 @@ mixed.sex = mixed %>% group_by(SEX) %>% count()
 mixed.hour %>%
   ggplot(aes(x=HOUR)) +
   geom_bar(aes(weight = n)) +
-  ggtitle("Accidents by hour") + ylab("accident count")
+  ggtitle("Accidents by hour") +
+  ylab("accident count")
 
 mixed.day %>%
   ggplot(aes(x=DAY_WEEK)) +
-  geom_bar(aes(weight = n))
+  geom_bar(aes(weight = n)) +
+  ggtitle("accidents by day of the week") +
+  ylab("accident count")
 
-# Radar plot the days of the week?
-# Maybe plot them on a map?
-# other cool ideas?
-# Do a cool multi graph comparing men and women drunk drivers
-# Do a weird day of the week, colored by hour data
+mixed.hour %>%
+  ggplot(aes(x=HOUR)) +
+  geom_bar(aes(weight = n)) +
+  ggtitle("accidents by hour") +
+  ylab("accident count")
+
+mixed.sex %>%
+  ggplot(aes(x=SEX)) +
+  geom_bar(aes(weight = n)) +
+  ggtitle("accidents by sex") +
+  ylab("accident count")
+
+```
+
+```{r}
+filter(mixed, AGE < 120) %>% 
+  ggplot(aes(x=AGE)) +
+  geom_histogram() + 
+  facet_grid(~SEX) +
+  ggtitle("accidents by age and sex") +
+  ylab("accident count")
+
+mixed$DRUGUSE = mixed$DRUGS > 0
+mixed %>% ggplot(aes(x=DAY_WEEK)) +
+  geom_histogram() +
+  facet_grid(~DRUGUSE) +
+  ggtitle("accident by day of the week and drug use") +
+  ylab("accident count")
+
 ```
