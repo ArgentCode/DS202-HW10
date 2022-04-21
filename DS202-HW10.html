@@ -227,7 +227,10 @@ acc.hour %&gt;%
 <pre class="r"><code>filter(acc, DRUNK_DR &gt; 0) %&gt;% summarize(n=n())</code></pre>
 <pre><code>##      n
 ## 1 8720</code></pre>
+<div id="slide-5-answers" class="section level4">
+<h4>Slide 5 Answers</h4>
 <p>The day of the week with the most accidents is the 7th day, and the day with the least is the 3rd day. Unsure which day of the week that specifically is referring to. 1800 (6pm) has the highest count of accidents, while 0400 (4am) has the lowest count of accidents. There are 8,720 accidents that involve atleast one drunk driver.</p>
+</div>
 </div>
 <div id="slide-6" class="section level3">
 <h3>Slide 6</h3>
@@ -244,7 +247,6 @@ acc.person.reduced = right_join(acc.reduced, persons1.reduced, by = matchingData
 dim(acc.person.reduced)</code></pre>
 <pre><code>## [1] 50843    12</code></pre>
 <pre class="r"><code>#14 matching columns used to match the data</code></pre>
-<p>dim(persons1)-dim(acc) #added 69 columns, and 17475 rows</p>
 <p>Tally the number of accidents by day of the week (DAY_WEEK), hour of the day (HOUR) and gender (SEX). Visualize the results!</p>
 <pre class="r"><code>mixed = acc.person.reduced
 mixed.hour = mixed %&gt;% filter(HOUR &lt;= 24) %&gt;% group_by(HOUR) %&gt;% tally()
